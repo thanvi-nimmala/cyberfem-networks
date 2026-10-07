@@ -16,7 +16,7 @@ Nine works, 1993 to now, in which feminist artists use the internet itself to qu
 | 2012–20 | Legacy Russell | Glitch Feminism |
 | 2016–21 | Morehshin Allahyari | She Who Sees the Unknown |
 
-The first edition was made for Net Art Online (Fall 2025). This is a full rebuild, revised in 2026.
+Made for Net Art Online.
 
 ## Run locally
 
