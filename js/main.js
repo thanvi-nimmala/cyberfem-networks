@@ -1,4 +1,4 @@
-// Cyberfeminist Networks: network view, index view, and draggable windows.
+// Cyberfem Networks: network view, index view, and draggable windows.
 
 (() => {
   const $ = (sel, root = document) => root.querySelector(sel);

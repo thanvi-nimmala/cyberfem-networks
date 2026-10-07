@@ -1,4 +1,4 @@
-# Cyberfeminist Networks
+# Cyberfem Networks
 
 **Identity, Resistance, and Networked Bodies.** A net-art exhibition curated by Thanvi Nimmala.
 
