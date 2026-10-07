@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyberfeminist Networks</title>
+  <meta name="description" content="Cyberfeminist Networks: Identity, Resistance, and Networked Bodies. A net-art exhibition of nine works, 1993 to now, curated by Thanvi Nimmala.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-view="network">
+
+  <a class="skip" href="#index">Skip to the list of works</a>
+
+  <!-- Browser chrome -->
+  <header class="chrome">
+    <div class="chrome-row">
+      <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+      <div class="location" aria-hidden="true">
+        <span class="proto">http://</span>cyberfeminist.networks/~exhibition/<span class="caret">_</span>
+      </div>
+      <nav class="views" aria-label="View">
+        <button type="button" data-view-btn="network" aria-pressed="true">NETWORK</button>
+        <button type="button" data-view-btn="index" aria-pressed="false">INDEX</button>
+      </nav>
+    </div>
+    <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h1 class="glow">Cyberfeminist Networks</h1>
+      <p class="subtitle">Identity, Resistance, and Networked Bodies</p>
+      <p class="byline">Curated by Thanvi Nimmala &middot; 9 works &middot; 1993&ndash;now</p>
+      <div class="intro-row">
+        <p class="lede">Nine works of net art in which feminist artists use the internet itself to question power, identity, and authorship. Each is wired to the threads it shares with the others. Pick a thread to follow it, or open a work.</p>
+        <button type="button" class="icon" id="readme-btn">
+          <span class="icon-img" aria-hidden="true"></span>
+          <span class="icon-label">README.TXT</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Curator statement: shown inline in the index view and on small screens,
+         and copied into the README.TXT window in the network view. -->
+    <section class="statement" id="statement" aria-labelledby="statement-h">
+      <h2 id="statement-h">Curatorial statement</h2>
+      <p>Cyberfeminist Networks explores how feminist artists have used the internet itself as a medium to question power, identity, and authorship. Each work in this exhibition depends on networked systems to exist, demonstrating how the web can be both a site of experimentation and critique.</p>
+      <p>Cornelia Sollfrank&rsquo;s <em>Female Extension</em> (1997) intervenes directly in online systems of authority, generating fictitious female artist identities to reveal and critique gender bias within digital and institutional networks. Martine Neddam&rsquo;s <em>Mouchette</em> (1996&ndash;ongoing) creates an unsettling online persona that engages users in questions of anonymity, consent, and identity. VNS Matrix&rsquo;s <em>All New Gen</em> (1993&ndash;94) presents a playful, provocative cyberfeminist vision, reclaiming early web aesthetics.</p>
+      <p>This edition widens the network. Olia Lialina&rsquo;s hypertext and Shu Lea Cheang&rsquo;s <em>Brandon</em> show the browser itself becoming a body that splits and is watched. The collectives Old Boys Network and subRosa show cyberfeminism as an organized practice, not only a style. Legacy Russell&rsquo;s <em>Glitch Feminism</em> and Morehshin Allahyari&rsquo;s <em>She Who Sees the Unknown</em> carry those questions into social media and 3D-scanned heritage.</p>
+      <p>These works highlight the internet&rsquo;s dual role as medium and collaborator, demonstrating how cyberfeminist net art has historically used network structures to challenge social hierarchies, redistribute authorship, and imagine alternative forms of online presence and community.</p>
+      <p class="howto">The exhibition is arranged as a network, not a list. Every work is wired to the threads it shares with others. Select a thread to follow it, or open a work to read about it.</p>
+    </section>
+
+    <!-- Network view -->
+    <section class="network" id="network" aria-label="Exhibition network">
+      <svg class="wires" id="wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div class="hubs" id="hubs"></div>
+      <div class="nodes" id="nodes"></div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline" aria-label="Timeline">
+      <div class="timeline-axis" id="timeline"></div>
+    </section>
+
+    <!-- Index view: an Apache-style directory listing -->
+    <section class="listing" id="index" aria-labelledby="listing-h">
+      <h2 id="listing-h">Index of /exhibition/works</h2>
+      <div class="filters" id="filters" role="group" aria-label="Filter by thread"></div>
+      <table>
+        <thead>
+          <tr><th scope="col">Name</th><th scope="col">Year</th><th scope="col">Threads</th><th scope="col">Description</th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <address>Hand-built HTML/CSS/JS &middot; Net Art Online, Fall 2025 &middot; revised 2026</address>
+    </section>
+  </main>
+
+  <div class="windows" id="windows"></div>
+
+  <footer class="status" aria-live="polite">
+    <span id="status">Document: Done</span>
+    <span class="status-right">Curated by Thanvi Nimmala</span>
+  </footer>
+
+  <script src="js/works.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
