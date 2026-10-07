@@ -25,6 +25,7 @@
   let activeTheme = null;
 
   const fileName = w => w.id + '/';
+  const workIndex = id => WORKS.findIndex(w => w.id === id);
   const setStatus = msg => { $('#status').textContent = msg || 'Document: Done'; };
 
   /* ---------- Ticker ---------- */
@@ -60,7 +61,7 @@
     b.setAttribute('aria-pressed', 'false');
     b.innerHTML = `<span class="hub-label">[ ${t.label} ]</span><span class="hub-blurb">${t.blurb}</span>`;
     b.addEventListener('click', () => setTheme(activeTheme === key ? null : key));
-    b.addEventListener('mouseenter', () => setStatus(`Thread: ${t.label}. ${t.blurb}`));
+    b.addEventListener('mouseenter', () => { setStatus(`Thread: ${t.label}. ${t.blurb}`); SFX.hoverThread(key); });
     b.addEventListener('mouseleave', () => setStatus());
     $('#hubs').appendChild(b);
   });
@@ -80,9 +81,9 @@
       <span class="node-year">${w.year}</span>
       <span class="node-dots">${w.themes.map(t => `<i class="dot dot-${t}" title="${THEMES[t].label}"></i>`).join('')}</span>`;
     b.addEventListener('click', () => openWork(w.id));
-    b.addEventListener('mouseenter', () => hoverWork(w.id, true));
+    b.addEventListener('mouseenter', () => { hoverWork(w.id, true); SFX.hoverWork(workIndex(w.id)); });
     b.addEventListener('mouseleave', () => hoverWork(w.id, false));
-    b.addEventListener('focus', () => hoverWork(w.id, true));
+    b.addEventListener('focus', () => { hoverWork(w.id, true); SFX.hoverWork(workIndex(w.id)); });
     b.addEventListener('blur', () => hoverWork(w.id, false));
     $('#nodes').appendChild(b);
   });
@@ -96,6 +97,8 @@
 
   /* ---------- Theme filter (shared by both views) ---------- */
   function setTheme(key) {
+    if (key) SFX.playThread(key, WORKS.filter(w => w.themes.includes(key)).map(w => workIndex(w.id)));
+    else if (activeTheme) SFX.clearThread();
     activeTheme = key;
     document.body.dataset.theme = key || '';
     document.querySelectorAll('[data-theme]').forEach(el => {
@@ -134,6 +137,7 @@
     t.addEventListener('click', () => openWork(w.id));
     t.addEventListener('mouseenter', () => {
       hoverWork(w.id, true);
+      SFX.year(w.start);
       document.querySelector(`.node[data-work="${w.id}"]`).classList.add('hot');
     });
     t.addEventListener('mouseleave', () => {
@@ -172,6 +176,7 @@
 
   /* ---------- View switching ---------- */
   function setView(v) {
+    if (document.body.dataset.view !== v) SFX.seek();
     document.body.dataset.view = v;
     document.querySelectorAll('[data-view-btn]').forEach(b =>
       b.setAttribute('aria-pressed', String(b.dataset.viewBtn === v)));
@@ -212,6 +217,7 @@
     win.style.top = (110 + off) + 'px';
     desk.appendChild(win);
     raise(win);
+    SFX.open();
     win.addEventListener('pointerdown', () => raise(win));
     win.querySelector('.win-close').addEventListener('click', () => closeWindow(win));
     drag(win);
@@ -223,6 +229,7 @@
   function closeWindow(win) {
     const key = win.dataset.key;
     win.remove();
+    SFX.close();
     if (location.hash === `#${key}`) history.replaceState(null, '', location.pathname + location.search);
     if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
   }
@@ -235,12 +242,14 @@
       const dx = e.clientX - r.left, dy = e.clientY - r.top;
       bar.setPointerCapture(e.pointerId);
       win.classList.add('dragging');
+      SFX.grab();
       const move = ev => {
         win.style.left = Math.min(window.innerWidth - 80, Math.max(-r.width + 120, ev.clientX - dx)) + 'px';
         win.style.top = Math.min(window.innerHeight - 40, Math.max(0, ev.clientY - dy)) + 'px';
       };
       const up = () => {
         win.classList.remove('dragging');
+        SFX.drop();
         bar.removeEventListener('pointermove', move);
         bar.removeEventListener('pointerup', up);
       };
@@ -297,6 +306,18 @@
   window.addEventListener('hashchange', () => {
     const id = location.hash.slice(1);
     if (byId[id]) openWork(id);
+  });
+
+  /* ---------- Sound toggle ---------- */
+  const soundBtn = $('#sound-btn');
+  soundBtn.addEventListener('click', () => {
+    SFX.set(!SFX.on);
+    soundBtn.setAttribute('aria-pressed', String(SFX.on));
+    soundBtn.querySelector('.sound-state').textContent = SFX.on ? 'ON' : 'OFF';
+    setStatus(SFX.on ? 'Dialing in\u2026 sound on' : 'Sound off');
+  });
+  document.addEventListener('click', e => {
+    if (e.target.closest('.views button, .filter, .chip, #readme-btn')) SFX.press();
   });
 
   /* ---------- Boot ---------- */

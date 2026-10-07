@@ -33,6 +33,7 @@ Then open http://localhost:5191.
 - `index.html`: page, curatorial statement, and both views
 - `js/works.js`: exhibition data (works, threads, wall text)
 - `js/main.js`: network wiring, index listing, timeline, and draggable windows
+- `js/sound.js`: sound design, synthesized live with the Web Audio API (no audio files); off until the visitor presses SOUND
 - `css/styles.css`: styles
 - `images/`: screenshots of each work, linked to the work itself
 
