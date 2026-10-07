@@ -334,7 +334,7 @@
   paintSound();
 
   const unlock = e => {
-    if (e.target.closest && e.target.closest('#sound-btn')) return;
+    if (e.target.closest && e.target.closest('#sound-btn, #splash')) return;
     if (soundWanted && !SFX.on) { SFX.set(true); paintSound(); setStatus('Dialing in\u2026'); }
     else if (SFX.on) SFX.resume();
   };
@@ -353,6 +353,57 @@
     if (e.target.closest('.views button, .filter, .chip, #readme-btn')) SFX.press();
   });
 
+  /* ---------- Splash ---------- */
+  const splash = $('#splash');
+  let seen = false;
+  try { seen = sessionStorage.getItem('cfn-entered') === '1'; } catch (e) { /* storage unavailable */ }
+
+  if (seen) splash.remove();
+  else {
+    const behind = document.querySelectorAll('body > :not(#splash):not(script)');
+    behind.forEach(el => el.inert = true);
+    document.body.classList.add('locked');
+
+    const leave = delay => {
+      try { sessionStorage.setItem('cfn-entered', '1'); } catch (e) { /* storage unavailable */ }
+      setTimeout(() => {
+        splash.classList.add('gone');
+        document.body.classList.remove('locked');
+        behind.forEach(el => el.inert = false);
+        setTimeout(() => splash.remove(), 600);
+        setStatus();
+      }, delay);
+    };
+
+    // A dial-up log, timed to the modem handshake in sound.js
+    const LOG = [
+      [0, 'ATDT 1-800-CYBERFEM'],
+      [380, 'DIALING\u2026'],
+      [760, 'CARRIER 28800'],
+      [1100, 'CONNECT 56000'],
+      [1450, 'WELCOME TO THE NETWORK_'],
+    ];
+
+    $('#splash-enter').addEventListener('click', () => {
+      soundWanted = true;
+      try { localStorage.setItem('cfn-sound', 'on'); } catch (e) { /* storage unavailable */ }
+      if (!SFX.on) SFX.set(true);
+      paintSound();
+      splash.classList.add('dialing');
+      const log = $('#splash-log');
+      LOG.forEach(([t, line]) => setTimeout(() => { log.textContent += line + '\n'; }, reduceMotion.matches ? 0 : t));
+      leave(reduceMotion.matches ? 300 : 2000);
+    });
+
+    $('#splash-quiet').addEventListener('click', () => {
+      soundWanted = false;
+      try { localStorage.setItem('cfn-sound', 'off'); } catch (e) { /* storage unavailable */ }
+      SFX.set(false);
+      paintSound();
+      leave(0);
+    });
+  }
+
   /* ---------- Boot ---------- */
   const syncChrome = () => document.documentElement.style
     .setProperty('--chrome-h', $('.chrome').offsetHeight + 'px');
@@ -365,4 +416,5 @@
   const initial = location.hash.slice(1);
   if (byId[initial]) openWork(initial);
   if (reduceMotion.matches) document.body.classList.add('still');
+  if (document.body.classList.contains('locked')) $('#splash-enter').focus();
 })();

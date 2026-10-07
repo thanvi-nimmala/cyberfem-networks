@@ -12,6 +12,20 @@
 </head>
 <body data-view="network">
 
+  <!-- Splash: the dial-up gateway. Its click is the gesture browsers need before sound can play. -->
+  <div class="splash" id="splash" role="dialog" aria-modal="true" aria-labelledby="splash-title">
+    <div class="splash-inner">
+      <p class="splash-kicker">a net-art exhibition</p>
+      <h2 class="splash-title glow" id="splash-title">Cyberfeminist<br>Networks</h2>
+      <p class="splash-sub">Identity, Resistance, and Networked Bodies</p>
+      <p class="splash-by">Curated by Thanvi Nimmala &middot; 9 works &middot; 1993&ndash;now</p>
+      <button type="button" class="splash-enter" id="splash-enter">[ ENTER ]</button>
+      <button type="button" class="splash-quiet" id="splash-quiet">enter without sound</button>
+      <pre class="splash-log" id="splash-log" aria-live="polite"></pre>
+      <p class="splash-badge" aria-hidden="true"><span>BEST HEARD</span><span>WITH SOUND ON</span></p>
+    </div>
+  </div>
+
   <a class="skip" href="#index">Skip to the list of works</a>
 
   <!-- Browser chrome -->
