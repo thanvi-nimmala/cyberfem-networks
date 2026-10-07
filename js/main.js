@@ -157,11 +157,13 @@
     b.setAttribute('aria-pressed', String(!k));
     b.textContent = `[${label}]`;
     b.addEventListener('click', () => setTheme(k || null));
+    b.addEventListener('mouseenter', () => k ? SFX.hoverThread(k) : SFX.press());
     filters.appendChild(b);
   });
 
   const rows = $('#rows');
   rows.innerHTML = `<tr class="parent"><td colspan="4"><a href="#network" data-view-link="network">&uarr; Parent Directory</a></td></tr>`;
+  rows.querySelector('.parent a').addEventListener('mouseenter', () => SFX.parent());
   [...WORKS].sort((a, b) => a.start - b.start).forEach(w => {
     const tr = document.createElement('tr');
     tr.dataset.work = w.id;
@@ -170,7 +172,13 @@
       <td>${w.year}</td>
       <td>${w.themes.map(t => `<i class="dot dot-${t}"></i>${THEMES[t].label.toLowerCase()}`).join('<br>')}</td>
       <td><strong>${w.artist}</strong> &mdash; <em>${w.title}</em></td>`;
-    tr.querySelector('a').addEventListener('click', e => { e.preventDefault(); openWork(w.id); });
+    const link = tr.querySelector('a');
+    link.addEventListener('click', e => { e.preventDefault(); openWork(w.id); });
+    ['mouseenter', 'focus'].forEach(ev => link.addEventListener(ev, () => {
+      SFX.hoverWork(workIndex(w.id));
+      setStatus(`Connecting to ${new URL(w.url).host}\u2026`);
+    }));
+    link.addEventListener('mouseleave', () => setStatus());
     rows.appendChild(tr);
   });
 

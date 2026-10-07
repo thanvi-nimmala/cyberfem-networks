@@ -184,5 +184,11 @@ const SFX = (() => {
     seek() { for (let i = 0; i < 7; i++) noise({ t: i * 0.035 + Math.random() * 0.02, dur: 0.018, vol: 0.06, bp: 900 + Math.random() * 1600 }); },
 
     press() { noise({ dur: 0.015, vol: 0.05, hp: 4000 }); },
+
+    // Index view: going up a directory is a low tick
+    parent() {
+      noise({ dur: 0.02, vol: 0.05, hp: 2000 });
+      blip({ freq: 110, dur: 0.16, vol: 0.06, wave: 'triangle' });
+    },
   };
 })();
