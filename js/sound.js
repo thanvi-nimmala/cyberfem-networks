@@ -129,6 +129,8 @@ const SFX = (() => {
   return {
     get on() { return on; },
 
+    resume() { if (ctx && ctx.state !== 'running') ctx.resume(); },
+
     set(next) {
       init();
       on = next;

@@ -26,7 +26,8 @@
 
   const fileName = w => w.id + '/';
   const workIndex = id => WORKS.findIndex(w => w.id === id);
-  const setStatus = msg => { $('#status').textContent = msg || 'Document: Done'; };
+  let idleStatus = 'Document: Done';
+  const setStatus = msg => { $('#status').textContent = msg || idleStatus; };
 
   /* ---------- Ticker ---------- */
   const tickerText = [...WORKS].sort((a, b) => a.start - b.start)
@@ -316,14 +317,38 @@
     if (byId[id]) openWork(id);
   });
 
-  /* ---------- Sound toggle ---------- */
+  /* ---------- Sound: on by default ----------
+     Browsers only allow audio after a click, tap, or key press, so sound is
+     "armed" on load and starts on the visitor's first interaction. Turning it
+     off is remembered for next time. */
   const soundBtn = $('#sound-btn');
+  let soundWanted = true;
+  try { soundWanted = localStorage.getItem('cfn-sound') !== 'off'; } catch (e) { /* storage unavailable */ }
+
+  const paintSound = () => {
+    soundBtn.setAttribute('aria-pressed', String(soundWanted));
+    soundBtn.dataset.live = String(SFX.on);
+    soundBtn.querySelector('.sound-state').textContent = soundWanted ? 'ON' : 'OFF';
+    idleStatus = soundWanted && !SFX.on ? 'Sound is on \u2014 click anywhere to dial in' : 'Document: Done';
+  };
+  paintSound();
+
+  const unlock = e => {
+    if (e.target.closest && e.target.closest('#sound-btn')) return;
+    if (soundWanted && !SFX.on) { SFX.set(true); paintSound(); setStatus('Dialing in\u2026'); }
+    else if (SFX.on) SFX.resume();
+  };
+  ['pointerdown', 'keydown', 'touchend', 'click'].forEach(ev =>
+    document.addEventListener(ev, unlock, true));
+
   soundBtn.addEventListener('click', () => {
-    SFX.set(!SFX.on);
-    soundBtn.setAttribute('aria-pressed', String(SFX.on));
-    soundBtn.querySelector('.sound-state').textContent = SFX.on ? 'ON' : 'OFF';
-    setStatus(SFX.on ? 'Dialing in\u2026 sound on' : 'Sound off');
+    soundWanted = !soundWanted;
+    SFX.set(soundWanted);
+    try { localStorage.setItem('cfn-sound', soundWanted ? 'on' : 'off'); } catch (e) { /* storage unavailable */ }
+    paintSound();
+    setStatus(soundWanted ? 'Dialing in\u2026 sound on' : 'Sound off');
   });
+  setStatus();
   document.addEventListener('click', e => {
     if (e.target.closest('.views button, .filter, .chip, #readme-btn')) SFX.press();
   });

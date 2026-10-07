@@ -95,7 +95,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .sound[aria-pressed="true"] { color: var(--green); border-color: var(--bevel-lo) var(--bevel-hi) var(--bevel-hi) var(--bevel-lo); }
 .sound-icon { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
 .sound-icon i { width: 3px; height: 3px; background: currentColor; }
-.sound[aria-pressed="true"] .sound-icon i { animation: level .9s ease-in-out infinite alternate; }
+.sound[data-live="true"] .sound-icon i { animation: level .9s ease-in-out infinite alternate; }
 .sound-icon i:nth-child(2) { animation-delay: -.3s !important; }
 .sound-icon i:nth-child(3) { animation-delay: -.6s !important; }
 .sound-icon i:nth-child(4) { animation-delay: -.15s !important; }
